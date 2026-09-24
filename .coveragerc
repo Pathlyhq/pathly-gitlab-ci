@@ -1,0 +1,11 @@
+[run]
+branch = True
+source = pathly_api,pathly_cli
+
+[report]
+exclude_lines =
+    pragma: no cover
+    if __name__ == .__main__.:
+    raise SystemExit\(main\(\)\)
+show_missing = True
+fail_under = 100

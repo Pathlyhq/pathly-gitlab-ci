@@ -1,0 +1,22 @@
+# Example consumer pipeline for Pathly GitLab CI/CD components.
+# Product: https://pathlyhq.com · Developers: https://pathlyhq.com/en/developers
+
+include:
+  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-ping@~latest
+    inputs:
+      stage: test
+  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-scenario@~latest
+    inputs:
+      stage: deploy
+      scenario_name: "Production home"
+      scenario_url: "https://www.example.com/"
+      interval_sec: "300"
+      severity: major
+
+stages:
+  - test
+  - deploy
+
+variables:
+  # Set PATHLY_API_TOKEN as a masked CI/CD variable (Settings → CI/CD → Variables).
+  PATHLY_API_URL: "https://api.pathlyhq.com"

@@ -1,0 +1,61 @@
+# Pathly CI/CD Component — verify API token
+# Product: https://pathlyhq.com · Docs: https://pathlyhq.com/en/developers
+#
+# include:
+#   - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-ping@~latest
+#
+# Requires CI/CD variable PATHLY_API_TOKEN (masked) or pass api_token input.
+
+spec:
+  inputs:
+    stage:
+      default: test
+      description: Pipeline stage for the Pathly ping job
+    api_token:
+      default: $PATHLY_API_TOKEN
+      description: Pathly API token (sp_…). Prefer a masked CI/CD variable.
+    api_url:
+      default: "https://api.pathlyhq.com"
+      description: Pathly API base URL
+    job_name:
+      default: pathly-ping
+      description: Job name
+---
+"$[[ inputs.job_name ]]":
+  stage: $[[ inputs.stage ]]
+  image: python:3.12-slim
+  variables:
+    PATHLY_API_TOKEN: $[[ inputs.api_token ]]
+    PATHLY_API_URL: $[[ inputs.api_url ]]
+  script:
+    - |
+      set -euo pipefail
+      python3 - <<'PY'
+      import json, os, ssl, urllib.error, urllib.request
+
+      token = os.environ.get("PATHLY_API_TOKEN", "").strip()
+      if not token.startswith("sp_"):
+          raise SystemExit("PATHLY_API_TOKEN missing or not an sp_ token")
+      base = os.environ.get("PATHLY_API_URL", "https://api.pathlyhq.com").rstrip("/")
+      req = urllib.request.Request(
+          f"{base}/v1/usage",
+          headers={
+              "Authorization": f"Bearer {token}",
+              "Accept": "application/json",
+              "User-Agent": "pathlyhq/pathly-gitlab-ci",
+          },
+      )
+      try:
+          with urllib.request.urlopen(req, context=ssl.create_default_context()) as resp:
+              body = json.loads(resp.read().decode() or "{}")
+          print(json.dumps({"ok": True, "planId": body.get("planId")}))
+      except urllib.error.HTTPError as e:
+          if e.code == 403:
+              print(json.dumps({"ok": True}))
+          else:
+              raw = e.read().decode("utf-8", errors="replace")
+              raise SystemExit(f"Pathly ping failed HTTP {e.code}: {raw}")
+      print("Pathly token verified.", flush=True)
+      PY
+  rules:
+    - when: on_success
