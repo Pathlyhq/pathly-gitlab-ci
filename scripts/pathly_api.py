@@ -16,7 +16,7 @@ import uuid
 from typing import Any, Mapping, MutableMapping, Optional
 
 DEFAULT_API_URL = "https://api.pathlyhq.com"
-USER_AGENT = "pathly-gitlab-ci/0.1.0"
+USER_AGENT = "pathly-gitlab-ci/0.1.0"  # x-release-please-version
 
 
 class PathlyError(Exception):
