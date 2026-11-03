@@ -2,7 +2,7 @@
 # Product: https://pathlyhq.com · Docs: https://pathlyhq.com/en/developers
 #
 # include:
-#   - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-ping@~latest
+#   - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-ping.yml
 #
 # Requires CI/CD variable PATHLY_API_TOKEN (masked) or pass api_token input.
 

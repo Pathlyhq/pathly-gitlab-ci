@@ -31,10 +31,10 @@ Modèles dans [`templates/`](./templates/). Helpers dans [`scripts/`](./scripts/
 
 ```yaml
 include:
-  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-ping@~latest
+  - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-ping.yml
     inputs:
       stage: test
-  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-scenario@~latest
+  - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-scenario.yml
     inputs:
       stage: deploy
       scenario_name: "Accueil production"
@@ -42,7 +42,7 @@ include:
       interval_sec: "300"
 ```
 
-En production, préférez un tag de version à `~latest` (ex. `@1.0.0`).
+Les modèles sont autonomes (aucun fichier de ce dépôt n'est téléchargé à l'exécution), donc `include: remote` fonctionne depuis toute instance GitLab. Épinglez un tag de release dans l'URL (`v0.1.0` ci-dessus), jamais `main`. Pour les utiliser comme composants CI/CD, recopiez ce dépôt dans votre propre instance GitLab et incluez `component: $CI_SERVER_FQDN/<groupe>/pathly-gitlab-ci/pathly-ping@<version>`.
 
 Définir la variable CI/CD **masquée** `PATHLY_API_TOKEN` (`sp_…`) dans Paramètres → CI/CD → Variables. Ne jamais committer le jeton.
 
