@@ -29,10 +29,10 @@ Las plantillas están en [`templates/`](./templates/). Los helpers en [`scripts/
 
 ```yaml
 include:
-  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-ping@~latest
+  - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-ping.yml
     inputs:
       stage: test
-  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-scenario@~latest
+  - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-scenario.yml
     inputs:
       stage: deploy
       scenario_name: "Inicio producción"
@@ -40,7 +40,7 @@ include:
       interval_sec: "300"
 ```
 
-En producción, fije un tag de versión en lugar de `~latest` (por ejemplo `@1.0.0`).
+Las plantillas son autónomas (no se descarga ningún archivo de este repositorio en la ejecución), así que `include: remote` funciona desde cualquier instancia de GitLab. Fije una etiqueta de release en la URL (`v0.1.0` arriba), nunca `main`. Para usarlas como componentes CI/CD, copie este repositorio en su propia instancia de GitLab e incluya `component: $CI_SERVER_FQDN/<grupo>/pathly-gitlab-ci/pathly-ping@<versión>`.
 
 Defina la variable CI/CD **enmascarada** `PATHLY_API_TOKEN` (`sp_…`) en Ajustes → CI/CD → Variables. Nunca haga commit del token.
 

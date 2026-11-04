@@ -2,7 +2,7 @@
 # Product: https://pathlyhq.com · Docs: https://pathlyhq.com/en/developers
 #
 # include:
-#   - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-scenario@~latest
+#   - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-scenario.yml
 #     inputs:
 #       scenario_url: "https://www.example.com/"
 #

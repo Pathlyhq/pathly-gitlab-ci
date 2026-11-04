@@ -31,10 +31,10 @@ Templates live under [`templates/`](./templates/). Helpers under [`scripts/`](./
 
 ```yaml
 include:
-  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-ping@~latest
+  - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-ping.yml
     inputs:
       stage: test
-  - component: $CI_SERVER_FQDN/pathlyhq/pathly-gitlab-ci/pathly-scenario@~latest
+  - remote: https://raw.githubusercontent.com/Pathlyhq/pathly-gitlab-ci/v0.1.0/templates/pathly-scenario.yml
     inputs:
       stage: deploy
       scenario_name: "Production home"
@@ -42,7 +42,7 @@ include:
       interval_sec: "300"
 ```
 
-Pin a version tag instead of `~latest` in production (for example `@1.0.0`).
+The templates are self-contained (no file fetched from this repository at run time), so `include: remote` works from any GitLab instance. Pin a release tag in the URL (`v0.1.0` above), never `main`. To use them as CI/CD components instead, mirror this repository into your own GitLab instance and include `component: $CI_SERVER_FQDN/<group>/pathly-gitlab-ci/pathly-ping@<version>`.
 
 Set a **masked** CI/CD variable `PATHLY_API_TOKEN` (`sp_…`) under Settings → CI/CD → Variables. Never commit the token.
 
